@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<!-- (C)Copyright 2015 by Jiyan Akgül -->
+<style type="text/css">
+    @import "/css/simplegrid.css";
+
+    #YesNo {
+        background-color: white !important;
+        width: 250px !important;
+    }
+
+    #edit_event {
+        font-weight: 400;
+        font-size: 10pt;
+        background-color: white;
+        width: 900px;
+        overflow: hidden;
+        padding: 0px;
+        padding-bottom: 5px;
+        box-shadow: rgb(128, 128, 128) 0px 1px 1px 0px;
+        border-bottom: rgb(81, 80, 80) solid 1px;
+    }
+
+        #edit_event .EventCodeBox {
+            background-color: white;
+            width: 98%;
+            height: 300px;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            border: rgb(237, 237, 237) 1px dotted;
+            border-left: rgb(63, 98, 173) 3px solid;
+            margin-top: 10px;
+        }
+
+            #edit_event .EventCodeBox #EventCodeList {
+                padding: 0px;
+                margin: 0px;
+            }
+
+        #edit_event #EventCodeList li {
+            margin: 0px;
+            list-style-type: none;
+            padding-left: 15px;
+            color: black;
+            cursor:default;
+        }
+        #edit_event #EventCodeList li:hover {
+            cursor:pointer;
+            background-color:rgba(0,0,0,0.2);
+        }
+
+        #edit_event .EventCodeBox #EventCodeList li strong {
+            font-weight: 600;
+            padding-right: 3px;
+            color: rgba(10,60,150, 0.8);
+        }
+
+        #edit_event .EventCodeBox #EventCodeList li span.param {
+            padding: 0px 3px;
+            font-weight: 400;
+        }
+
+        #edit_event .EventCodeBox #EventCodeList li span.Variable {
+            padding: 0px 3px;
+            font-weight: 400;
+            color: rgb(165, 25, 25);
+        }
+
+        #edit_event .EventCodeBox #EventCodeList li span.Number {
+            padding: 0px 3px;
+            font-weight: 600;
+            color: rgb(23, 29, 150);
+        }
+
+        #edit_event #EventCodeList li.active {
+                background-color: rgba(0,0,0,0.9);
+                color: white;
+            }
+
+         #edit_event .EventCodeBox #EventCodeList li.active strong {
+            color: rgb(96, 149, 243);
+        }
+
+        #edit_event .EventCodeBox #EventCodeList li.active span.Variable {
+            color: rgb(254, 179, 179);
+        }
+
+        #edit_event .EventCodeBox #EventCodeList li.active span.Number {
+            color: rgb(164, 165, 198);
+        }
+
+        #edit_event .EventCodeBox #EventCodeList li.active em {
+            color: rgb(234, 205, 205);
+            text-shadow: rgba(255, 0, 0, 0.4) 0px 0px 1px;
+            font-style:normal;
+        }
+
+        /*#edit_event .EventCodeBox #EventCodeList li {
+                    background-color: rgb(203, 245, 217);
+                }
+                #edit_event .EventCodeBox #EventCodeList > li:nth-child(2n+1) {
+                    background-color: rgb(232, 255, 240);
+                }*/
+
+        #edit_event input {
+            background-color: rgb(248, 248, 248);
+            color: rgb(12, 14, 29);
+            line-height: 16pt;
+            padding: 0 2px 0 2px;
+            border: 1px rgb(41, 65, 79) solid;
+            border-radius: 3px;
+        }
+
+            #edit_event input:focus {
+                background-color: white;
+                color: black;
+                outline: none;
+                border: 1px rgb(89, 132, 157) solid;
+            }
+
+        #edit_event label {
+            font-weight: 800;
+            font-size: 10pt;
+        }
+
+        #edit_event #context-menu {
+            background-color: rgba(0, 0, 0, 0.71);
+            padding: 5px;
+            margin: 0px;
+        }
+</style>
+<div id="edit_event">
+    <input type="hidden" id="tile_id" data-args="tile" autofocus>
+
+    <div class="grid grid-pad">
+        <div class="col-1-3">
+            <label>Event Name</label><br /><br />
+            <input name="EventName" id="EventName" />
+            <hr />
+            <div class="grid grid-pad" id="Settings">
+                <div class="col-2-12">
+                    <label>Options</label><br /><br />
+                    <input value="click" name="EventOptionLoop" type="checkbox">Loop<br />
+                </div>
+                <div class="col-3-12">
+                    <label>Event Trigger</label><br /><br />
+                    <input value="click" name="EventTrigger" type="radio" checked>Player Click<br />
+                    <input value="touch" name="EventTrigger" type="radio">Player Touch(Move)<br />
+                    <input value="load" name="EventTrigger" type="radio">Map Load<br />
+                </div>
+            </div>
+        </div>
+        <div class="col-2-3">
+            <label>Event Code</label><br />
+            <div class="buttons">
+                <a href="#" data-template="add_event_method" data-template-modal="false" data-template-onload="add_event_method_ready"><span class="fa fa-plus"></span></a>
+            </div>
+            <div class="EventCodeBox">
+                <ol id="EventCodeList"></ol>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="grid grid-pad">
+    <div class="col-1-6">
+        <button id="EventsSave" class="stretch">Save</button>
+    </div>
+    <div class="col-1-6">
+        <button id="EventsDelete" class="stretch">Delete</button>
+    </div>
+</div>
+<br />
+
+<script type="text/javascript">
+    /*
+    =====================================
+    ============= ONLOAD ================
+    =====================================
+    */
+    function edit_event_ready() {
+
+        var $layer = $("#event_layer")
+        var tile_id = $("#edit_event #tile_id").val();
+        var c = tile_id.split('.');
+
+        var name = "";
+        var EVENT = null;
+
+        if (!$layer.find('i[data-coords="' + tile_id + '"]').length) {
+            $tile = $("<i>").css({
+                position: "absolute",
+                left: c[0] * 32,
+                top: c[1] * 32
+            }).attr("data-coords", tile_id).addClass("fa fa-bolt");
+            $layer.append($tile);
+            EVENT = GL.Editor.Events.add(tile_id, GL.Editor.Events.NextSimpleName());
+        } else {
+            EVENT = GL.Editor.Events.getByKey(tile_id);
+        }
+
+        if (EVENT == null) { // Event is null?
+            window.console.log("ERR_EVENT_LOAD");
+            return;
+        }
+        // Load Event Name
+        $("#edit_event #EventName").val(EVENT.Name);
+
+        // Load Event Settings
+        if (EVENT.SETTINGS) {
+            $.each(EVENT.SETTINGS, function (key, obj) {
+                if (obj.type == "checkbox") {
+                    $("#edit_event #Settings input[name=" + key + "]").prop("checked", obj.checked);
+                }
+                if (obj.type == "radio") {
+                    $("#edit_event #Settings input[name=" + key + "][value=" + obj.value + "]").prop("checked", obj.checked);
+                } else {
+                    $("#edit_event #Settings input[name=" + key + "]").val(obj.value);
+                }
+            });
+        }
+        // Load Event Code
+        if (EVENT.CODE) {
+            $.each(EVENT.CODE, function (i, val) {
+                $("#edit_event .EventCodeBox #EventCodeList").append($("<li>").html(edit_event_parse(val)));
+            });
+        }
+        //-------------------------------------------
+        //-----  Context Menu
+        //$(function () {
+            $.contextMenu({
+                selector: '#edit_event .EventCodeBox #EventCodeList > li',
+                callback: function (key, opt) {
+                    switch (key) {
+                        case "edit":
+                            break;
+                        case "delete":
+                            break;
+                    }
+                },
+                events: {
+                    show: function (opt) {
+                        //if ($("#edit_event .EventCodeBox #EventCodeList li.active").length > 1) {
+                        $(opt.$trigger).parent().find("li").removeClass("active");
+                        $(opt.$trigger).addClass("active");
+                    }
+                },
+                items: {
+                    "edit": { name: "Edit", icon: "edit" },
+                    //"cut": { name: "Cut", icon: "cut" },
+                    //"copy": { name: "Copy", icon: "copy" },
+                    //"paste": { name: "Paste", icon: "paste" },
+                    "delete": { name: "Delete", icon: "minus-square" },
+                }
+            });
+        //});
+        //-------------------------------------------
+            $('#edit_event .EventCodeBox #EventCodeList')
+            .off("mousedown", "li")
+            .on("mousedown", "li", function (e) {
+                $this = $(this);
+                if (!e.ctrlKey) {
+                    $(this).parent().find("li").removeClass("active");
+                }
+                if (!$this.hasClass("active")) {
+                    $this.addClass("active");
+                }
+                else {
+                    $this.removeClass("active");
+                }
+
+            });
+    }
+    ////// ===================================== END ONLOAD =====================================
+    ////// =====================================            =====================================
+    function edit_event_parse(line) {
+        var l = line.replace(')', '').split('(');
+        var parsed_line = '';
+        if (l.length > 1) {
+            parsed_line = '<strong>' + l[0] + '</strong><em>(</em>';
+            var param = l[1].split(",");
+            var max = param.length - 1;
+            $.each(param, function (i, val) {
+                var classes = "param";
+                if (val.startsWith("$")) {
+                    classes += " Variable";
+                } else if (!isNaN(val)) {
+                    classes += " Number";
+                }
+                parsed_line += '<span class="' + classes + '">' + val + '</span>';
+                if (i < max) {
+                    parsed_line += '<em>,</em>';
+                } else {
+                    parsed_line += '<em>)</em>';
+                }
+            });
+            return parsed_line
+        } else {
+            return line;
+        }
+    }
+
+    ///////// >>>>>>>>>>>>>>> SAVE BUTTON
+    $("#edit_event #EventsSave")
+        .off()
+        .click(function () {
+        var c = $("#edit_event #tile_id").val().split(".");
+        var $layer = $("#event_layer")
+        if (!$layer.find('i[data-coords="' + c[0] + "." + c[1] + '"]').length) {
+            alert("Ups... You broke it :(");
+        }
+        // Get Event from Event List
+        var EVENT = GL.Editor.Events.getByKey($("#edit_event #tile_id").val());
+        if (EVENT != null) {
+            // Refresh Event Name
+            var name = $("#edit_event #EventName").val();
+            if (name.length > 0 && name != EVENT.Name) {
+                EVENT.Name = name;
+            }
+            // Serialize Code and save in Event entry
+            EVENT.CODE = [];
+            $("#edit_event .EventCodeBox #EventCodeList li").each(function () {
+                EVENT.CODE.push($(this).text());
+            });
+            // Serialize Settings and save in Event entry
+            EVENT.SETTINGS = {};
+            $("#edit_event #Settings input").each(function () {
+                var name = $(this).attr('name');
+                var obj = {}
+                obj.type = $(this).attr("type");
+                obj.value = $(this).val();
+
+                if (obj.type == "checkbox" || obj.type == "radio") {
+                    obj.checked = $(this).prop("checked");
+                }
+                // Radio Buttons have the same name, so they will be added more than once
+                // To avoid a overwrite of a checked radio button, it will only save a checked radio button
+                if (EVENT.SETTINGS.hasOwnProperty(name) && !obj.checked) {
+                    return;
+                } else {
+                    EVENT.SETTINGS[name] = obj;
+                }
+            });
+        } else { // EVENT is null?
+            window.console.log("ERR_EVENT_SAVE");
+        }
+
+        $("#edit_event").remove();
+    });
+    ///////// >>>>>>>>>>>>>>>>> DELETE BUTTON
+    $("#edit_event #EventsDelete")
+        .off()
+        .click(function () {
+        if ($("#YesNo").length > 0) {
+            $("YesNo").remove();
+        }
+        $(document.body).append("<div id='YesNo' class='dialog'><h3>Do you want to delete this Event?</h3></div>");
+        $("#YesNo").dialog({
+            modal: true,
+            title: 'Delete Event',
+            closeText: "<span class='fa fa-times-circle'></span>",
+            zIndex: 10000,
+            autoOpen: true,
+            width: 'auto',
+            resizable: false,
+            buttons: {
+                Yes: function () {
+                    var c = $("#edit_event #tile_id").val().split(".");
+                    $('#event_layer i[data-coords="' + c[0] + "." + c[1] + '"]').remove();
+                    // Remove from Events List
+                    GL.Editor.Events.remove($("#edit_event input[name=EventName]").val());
+                    $("#edit_event").remove();
+                    $(this).remove();
+                },
+                No: function () {
+                    $(this).remove();
+                }
+            },
+            close: function (event, ui) {
+                $(this).remove();
+            }
+        });
+    });
+    /////////////////////////////////////////////////
+</script>

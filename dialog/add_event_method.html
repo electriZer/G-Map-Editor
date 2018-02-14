@@ -1,0 +1,323 @@
+<!--(C)Copyright 2015 by Jiyan Akgül-->
+<?xml version="1.0" encoding="UTF-8"?>
+<style>
+    #add_event_method {
+        padding: 10px 0px 10px 0px;
+        width: 600px !important;
+        overflow: hidden;
+    }
+
+        #add_event_method .grid {
+            width: 600px !important;
+            min-width: 0px !important;
+            max-width: 580px !important;
+        }
+
+        #add_event_method #events {
+            width: inherit !important;
+            padding: 5px 20px 15px 20px;
+            background-color: white;
+            box-shadow: inset 0px 0px 1px rgb(128, 128, 128);
+        }
+
+            #add_event_method #events  div:not([class^=col-]) {
+                width: 100%;
+            }
+
+        #add_event_method h3 {
+            color: rgba(10,60,150, 0.8);
+            text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;
+        }
+
+        #add_event_method .instruction {
+            font-size: 10pt;
+            margin-top: -3px;
+            margin-bottom: 10px;
+            color: rgb(38, 38, 38);
+        }
+
+        #add_event_method button i {
+            display: block;
+        }
+
+        #add_event_method button, input[type=submit] {
+            width: 100px;
+            #height: 30px;
+            border-radius: 5px;
+            text-align: center;
+            background-color: rgb(228, 228, 228);
+            box-shadow: 2px 2px 0px 0px rgb(128, 128, 128);
+            font-weight: 800;
+            padding: 3px;
+        }
+
+            #add_event_method button:hover, input[type=submit]:hover {
+                background-color: rgb(59, 147, 198);
+                color: white;
+                cursor: pointer;
+            }
+
+            #add_event_method button.back {
+                height: 35px;
+                width: 35px;
+                border-radius: 25px;
+                background-color: white;
+            }
+
+                #add_event_method button.back:hover {
+                    background-color: rgb(76, 255, 0);
+                    box-shadow: 2px 2px 0px 0px rgba(123, 123, 123, 0.62);
+                    border-color: rgb(255, 255, 255);
+                    cursor: pointer;
+                }
+
+        #add_event_method .navbar {
+            margin: 15px !important;
+            margin-top: 0px !important;
+            # margin-bottom: 0px !important;
+            padding: 0px !important;
+            max-width: 50%;
+        }
+
+        #add_event_method div[data-tabs] .ui-tabs-panel{
+            padding:5px 5px !important;
+        }
+
+        #add_event_method div[data-tabs] .ui-tabs-anchor{
+            background-color:rgba(38, 38, 38, 0.60);
+            color:white;
+            cursor:pointer;
+        }
+        #add_event_method div[data-tabs] .ui-tabs-anchor:hover{
+            background-color:rgba(38, 38, 38, 0.85);
+        }
+
+        #add_event_method div[data-tabs] > *[id^=tabs] h4
+        {
+            color: rgba(10,60,150, 0.8);
+        }
+
+        #add_event_method small {
+            margin-left: 5px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        #add_event_method .hidden {
+            display: none;
+        }
+
+        #add_event_method div[class^="col-"] {
+            margin-top: 5px;
+        }
+</style>
+
+<div class="navbar grid">
+    <div class="col-1-2">
+        <h3>Method Box</h3>
+    </div>
+    <div class="push-right">
+        <button class="hidden back" id="back"><i class="fa fa-arrow-left"></i></button>
+    </div>
+</div>
+<div id="events">
+    <div class="grid">
+        <!-- MOVEMENT -->
+        <div class="col-1-4">
+            <button data-nav><i class="fa fa-5x fa-arrows"></i>Movement</button>
+            <form class="hidden grid" method="GET" action="#">
+                <h3 title="Method Name">Move</h3>
+                <input type="hidden" name="METHOD" value="Move" />
+                <div>
+                    Object :
+                    <select name="PARAM" data-fill="OBJECTS" data-prefix="$">
+                        <option>THIS</option>
+                        <option selected>PLAYER</option>
+                    </select>
+                </div>
+                <div class="instruction">
+                    The object to be moved.
+                </div>
+
+                <div>
+                    Direction :
+                    <select name="PARAM">
+                        <option>Left</option>
+                        <option>Up</option>
+                        <option>Right</option>
+                        <option>Down</option>
+                    </select>
+                </div>
+                <div class="instruction">
+                    The direction to move.
+                </div>
+
+                <div>
+                    Steps :
+                    <input type="number" name="PARAM" value="1" max="99" min="0" style="width: 33px !important;" />
+                </div>
+                <div class="instruction">
+                    Amount of steps to move. Use '0' for a rotation in the given direction.
+                </div>
+
+                <div><input type="submit" value="Add" /></div>
+            </form>
+
+        </div>
+        <!-- DIALOG -->
+        <div class="col-1-4">
+            <button data-nav><i class="fa fa-5x fa-comments-o"></i>Dialog</button>
+            <div class="hidden grid">
+                <div >
+                    <div data-tabs>
+                        <ul>
+                            <li><a href="#tabs-1">Show Text</a></li>
+                            <li><a href="#tabs-2">Input</a></li>
+                            <li><a href="#tabs-3">Show Selection</a></li>
+                        </ul>
+                        <form id="tabs-1" class="grid">
+                            <input type="hidden" name="METHOD" value="DialogShowText" />
+                            <h4 title="Method Name">DialogShowText</h4>
+                            Text :
+                            <div class="instruction">
+                                The Text to show in the Dialog Box (100 Letters)
+                            </div>
+                            <textarea name="PARAM" cols="30" rows="5" maxlength="100"></textarea>
+
+                            <div>
+                                <input type="submit" value="Add" />
+                            </div>
+                        </form>
+                        <div id="tabs-2" class="grid">
+                            <form class="col-1-1">
+                                <h4>DialogInputText</h4>
+                                <input type="hidden" name="METHOD" value="DialogInputText" />
+                                <input type="submit" value="Add" />
+                            </form>
+                            <form class="col-1-1">
+                                <h4>DialogInputNumber</h4>
+                                <input type="hidden" name="METHOD" value="DialogInputNumber" />
+                                <input type="submit" value="Add" />
+                            </form>
+                        </div>
+                        <div id="tabs-3" class="grid">
+                            <form class="col-1-1">
+                                <h4>DialogInputText</h4>
+                                <input type="hidden" name="METHOD" value="$Input = DialogInputText" />
+                                <input type="submit" value="Add" />
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+                <input type="hidden" name="METHOD" value="DIALOG" />
+            </div>
+        </div>
+        <!-- PLAYER -->
+        <div class="col-1-4">
+            <button data-nav><i class="fa fa-5x fa-male"></i>Player</button>
+            <div class="hidden grid">
+                Comming Soon
+            </div>
+        </div>
+        <!-- MAP -->
+        <div class="col-1-4">
+            <button data-nav><i class="fa fa-5x fa-map-marker"></i>Map</button>
+            <div class="hidden grid">
+                Comming Soon
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    /*
+    =====================================
+    ============= ONLOAD ================
+    =====================================
+    */
+    function add_event_method_ready() {
+        var CurrentEvent = GL.Editor.Events.getByKey($("#edit_event #tile_id").val());
+        $('#add_event_method #events select[data-fill="OBJECTS"]').each(function () {
+            // save scope
+            $select = $(this);
+            // Find all events
+            GL.Editor.Events.each(function (Event) {
+                if (!Event.Name) return;
+                if (Event.Name == CurrentEvent.Name) return;
+                $select.append('<option>' + Event.Name + '</option>');
+            });
+        });
+        $("#add_event_method #events div[data-tabs]").each(function () { $(this).tabs();});
+    }
+    ///////////////////////////////////////// Navigation
+    $("#add_event_method #events button[data-nav]")
+        .off()
+        .on("click", function (e) {
+        $("#add_event_method #events button[data-nav]").each(function () {
+            $(this).parent().hide();
+        });
+
+        // Hide the Button
+        $(this).hide();
+        // Show following content in block of Button
+        $(this).parent().show();
+        $(this).next().show();
+
+        // Show "Back" Button
+        $("#add_event_method #back").show();
+    });
+    $("#add_event_method #back")
+        .off()
+        .on("click", function (e) {
+        $("#add_event_method button[data-nav]").each(function () {
+            // Show the Button
+            $(this).parent().show();
+            $(this).show();
+            // Hide following content in block of Button
+            $(this).next().hide();
+        });
+        // Hide "Back" Button
+        $(this).hide();
+    });
+    ///////////////////////////////////////// Submit
+    $("#add_event_method form")
+        .off()
+        .on("submit", function (e) {
+        var $func = $(this).find("*[name]");
+        if (!$func.length) {
+            return;
+        }
+        var code = "";
+        var closing = false;
+        var seperate = false;
+        $func.each(function () {
+            var name = $(this).attr("name");
+            var val = $(this).val();
+            var prefix = $(this).attr("data-prefix");
+            if (name == "PARAM") {
+                if (seperate) {
+                    code += ",";
+                }
+                if (prefix) {
+                    code += prefix;
+                }
+                code += val;
+                seperate = true;
+            } else if (name == "METHOD") {
+                code += val + "(";
+                closing = true;
+            }
+        })
+        if (closing) {
+            code += ")";
+        }
+        $ecl = $(" #edit_event .EventCodeBox").find("#EventCodeList");
+        if (!$ecl.length) {
+            e.preventDefault();
+            return;
+        }
+        $ecl.append($("<li>").html(edit_event_parse(code)));
+        e.preventDefault();
+    })
+
+</script>

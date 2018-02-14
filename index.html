@@ -1,101 +1,156 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>2d_ssg Editor</title>
+<head>
+    <meta charset="utf-8">
+    <title>Online-Tile-Map-Editor</title>
+    <meta name="author" content="Elias Schütt; Jiyan Akgül">
+    <meta name="description" content="A web based tile map editor for G2D Web Game Engine">
+    <meta name="keywords" content="online, tile, map, editor, html5">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:600">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body onselectstart="return false;" style="-moz-user-select: none; -webkit-user-select: none; -khtml-user-select: none;" oncontextmenu="return false;">
+    <ul id="topbar" class="menubar">
+        <li class="nohover"><i class="fa fa-circle-thin" style="font-size:23px;margin-top:-6px;color:#cf8929"></i><span style="color:#c45c12;font-size:13px;font-weight:800;position:relative;top:-3px;left:-15px;">G</span><span style="font-weight:900;font-size:10px;position:relative;top:-4px;left:-11px">MAP EDITOR</span></li>
+        <li>
+            File
+            <ul>
+                <li data-template="new_file"><span class="fa fa-file"></span> Neue Map</li>
+                <li data-template="import"><span class="fa fa-sign-in"></span> Importieren</li>
+                <li data-template="export"><span class="fa fa-sign-out"></span> Exportieren</li>
+            </ul>
+        </li>
+        <li>
+            Edit
+            <ul>
+                <li data-template="canvas_settings"><span class="fa fa-cog"></span> Map Einstellungen</li>
+            </ul>
+        </li>
+        <li>
+            View
+            <ul>
+                <li data-toggle="class:nogrid:#canvas"><span class="fa fa-check-square-o"></span> Grid Sichtbar</li>
+                <li data-toggle="fullscreen:body"><span class="fa fa-expand"></span> <span class="text">Vollbild</span></li>
+            </ul>
+        </li>
+        <li>
+            Help
+            <ul>
+                <li data-template="controls"><span class="fa fa-question-circle"></span> Shortkeys</li>
+                <li data-template="about"><span class="fa fa-info-circle"></span> Über Uns</li>
+            </ul>
+        </li>
+    </ul>
+    <ul id="topbar_extra" class="menubar">
+        <li id="UnDo">
+            <span class="fa fa-rotate-left disabled" style="color:grey;"></span>
+            Undo
+        </li>
+        <li id="ReDo">
+            <span class="fa fa-rotate-right disabled" style="color:grey;"></span>
+            Redo
+        </li>
 
-		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:600">
-		<link rel="stylesheet" type="text/css" href="css/main.css">
-		<link rel="stylesheet" type="text/css" href="css/jquery.jscrollpane.css">
+        <li>
+            <span class="fa fa-play" style="color:green;"></span>
+            Run
+        </li>
+       
+    </ul>
 
-		<script type="text/javascript" src="js/libs/jquery-1.8.2.min.js"></script>
-		<script type="text/javascript" src="js/libs/jquery-ui-1.8.24.custom.min.js"></script>
 
-		<script type="text/javascript" src="js/plugins/jquery.mousewheel.min.js"></script>
-		<script type="text/javascript" src="js/plugins/jquery.jscrollpane.min.js"></script>
-		<script type="text/javascript" src="js/plugins/jquery.collapsible.min.js"></script>
+    <div id="toolbar" class="border-box">
+        <div id="tools">
+            <span class="fa fa-pencil active" data-tool="draw" title="Pencil"></span>
+            <span class="fa fa-pencil-square" data-tool="drawBox" title="Draw Box"></span>
+            <hr style="padding: 0px; margin: 4px 0px; border-color: rgb(79, 79, 79);">
+            <span class="fa fa-tint" data-tool="fill" title="Fill Area"></span>
+            <span class="fa fa-eraser" data-tool="erase" title="Erase"></span>
+            <hr style="padding: 0px; margin: 4px 0px; border-color: rgb(79, 79, 79);">
+            <span class="fa fa-bolt" data-tool="events" title="Events"></span>
+            <span class="fa fa-shield" data-tool="collision" title="Block Tiles"></span>
 
-		<script type="text/javascript" src="js/libs/underscore.min.js"></script>
-		<script type="text/javascript" src="js/libs/backbone.min.js"></script>
+        </div>
+        <section id="collision_settings">
+            <h2>Collision Settings</h2>
+            <div>
+                <p style="text-align:center;">Select directions to block</p>
+                <div class="grid setting grid-pad">
+                    <div class="col-1-1">
+                        <div class="col-1-1">
+                            <i class="fa fa-chevron-down" data-block="up-down"></i>
+                        </div>
+                        <div class="col-1-1" style="margin-top:-7px">
+                            <i class="fa fa-chevron-up" data-block="up-up"></i>
+                        </div>
+                    </div>
+                    <div class="col-1-3">
+                        <i class="fa fa-chevron-right" data-block="left-right"></i><i class="fa fa-chevron-left" data-block="left-left"></i>
+                    </div>
+                    <div class="col-1-3">
+                        <i class="fa fa-crosshairs fa-2x" title="All Directions" data-block="all"></i>
+                    </div>
+                    <div class="col-1-3">
+                        <i class="fa fa-chevron-right" data-block="right-left"></i><i class="fa fa-chevron-left" data-block="right-right"></i>
+                    </div>
+                    <div class="col-1-1">
+                        <div class="col-1-1">
+                            <i class="fa fa-chevron-down" data-block="down-down"></i>
+                        </div>
+                        <div class="col-1-1" style="margin-top:-7px">
+                            <i class="fa fa-chevron-up" data-block="down-up"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-		<script type="text/javascript" src="js/utils.js"></script>
-		<script type="text/javascript" src="js/models.js"></script>
-		<script type="text/javascript" src="js/views.js"></script>
-		<script type="text/javascript" src="js/collections.js"></script>
-		<script type="text/javascript" src="js/core.js"></script>
-	</head>
+        <section id="tilesets">
+            <h2>Tilesets</h2>
+            <div>
+                <div class="loading"><img src="img/icons/loading.gif" alt="loading"></div>
+                <div id="custom_select" class="border-box"><select name="tileset_select"><select></div>
+                <div id="tileset"><div id="tileset_container"></div></div>
+                <div class="buttons">
+                    <a href="#" data-template="tileset_form"><span class="fa fa-plus"></span></a>
+                    <a href="#" id="tilesets_remove" class="remove"><span class="fa fa-trash-o"></span></a>
+                </div>
+            </div>
+        </section>
 
-	<body>
-		<a href="https://github.com/elias94xx/Online-Tile-Map-Editor"><img style="position: absolute; top: 26px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+        <section id="layers">
+            <h2>Layers</h2>
+            <div>
+                <ul id="layerlist"></ul>
+                <div class="buttons">
+                    <a href="#" id="layer-rename" title="Rename Layer"><span class="fa fa-pencil"></span></a>
+                    <a href="#" id="layer-clear" class="remove" title="Clear Layer"><span class="fa fa-minus-square"></span></a>
+                    <a href="#" id="layer-remove" class="remove" title="Remove Layer"><span class="fa fa-trash-o"></span></a>
+                    <a href="#" id="layers-add"><span class="fa fa-file" title="New Layer"></span></a>
+                </div>
+            </div>
+        </section>
+        
+        
+    </div>
 
-		<div id="dialog" class="dialog"></div>
-		
-		<div id="toolbar">
-			<section id="tilesets">
-				<h2 id="section1">Tilesets</h2>
+    <div id="canvas_wrapper_jsp">
+        <div id="canvas_wrapper">
+            <div id="canvas" onselectstart="return false;">
 
-				<div>
-					<div id="loading"><img src="img/icons/loading.gif" alt="loading"></div>
-					<div id="custom_select"><select name="tileset_select"><select></div>
-					<div id="tileset"><div id="tileset_container"></div></div>
+                <div id="tiles">
+                    <div id="event_layer" class="layer"></div>
+                    <div id="collision_layer" class=""></div>
+                </div>
 
-					<div class="dialog" id="dialog_tileset" title="Add Tileset">
-						<table>
-							<tr>
-								<td>File</td>
-								<td>
-									<div id="file_container">
-										<input type="file" name="tileset_file">
-										<input type="button" name="tileset_file_overlay" value="choose tileset"></div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>Tile Width</td>
-								<td><input type="number" name="tile_width" value="32"></td>
-							</tr>
-							<tr>
-								<td>Tile Height</td>
-								<td><input type="number" name="tile_height" value="32"></td>
-							</tr>
-							<tr>
-								<td>Tile Margin</td>
-								<td><input type="number" name="tile_margin" value="0"></td>
-							</tr>
-							<tr>
-								<td><span class="hint" title="If desired, specify a color in HEX or RGB format which will later become transparent.">Tile Alpha</span></td>
-								<td><input type="text" name="tile_alpha" value="" maxlength="11" placeholder="hex / rgb"></td>
-							</tr>
-							<tr>
-								<td colspan="2"><input type="button" value="add tileset" id="tileset_add"></td>
-							</tr>
-						</table>
-					</div><br>
+                <div class="selection" id="selection"></div>
+                
 
-					<a href="#" id="tileset_dialog_opener">Add tileset</a>
-					<a href="#" id="tileset_remove" class="remove">Remove tileset</a>
-				</div>
-			</section>
+                <div class="warning border-box"></div>
+            </div>
+        </div>
+    </div>
 
-			<section id="layers">
-				<h2 id="section2">Layers</h2>
-
-				<div>
-					<ul id="layer_list">
-					</ul><br>
-					
-					<a href="#" id="layer-add">Add layer</a>
-				</div>
-			</section>
-		</div>
-
-		<div id="container" oncontextmenu="return false;">
-			<div id="canvas">
-				<div id="canvas_selection"></div>
-				<div id="canvas_tiles"></div>
-			</div>
-			<div id="grid"></div>
-			<div id="viewport"></div>
-		</div>
-	</body>
+    <script type="text/javascript" data-main="js/main.js" src="js/libs/require.js"></script>
+</body>
 </html>

@@ -1,43 +1,26 @@
-Online Tile Map Editor
-======================
-
-A web based tile map editor for all kinds of 2d games and applications.  
-**Live Demo: http://elias-schuett.de/git/Online-Tile-Map-Editor/**
-
------
+# G Map Editor
+	G Map Editor is a customized Version of Online-Tile-Map-Editor, with some new features and bug fixes.
+	G Map Editor was made for a never released HTML5 RPG Maker.
+	Copyright 2015 by Jiyan Akgül &lt;jiyan@akguel.net&gt;
+	
+This Editor was based on following Map Editor :
+Online Tile Map Editor (https://github.com/elias-schuett/Online-Tile-Map-Editor)<br>
+Copyright 2012-2014 Elias Schütt &lt;contact@elias.media&gt;<br>
+Open source under the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> license.
 
 #Features
 
-###### Implemented
-  
+## Implemented
+
+  * Tools `(select, fill, flip/rotate, ...)`
+  * Save/Load `(JSON, XML, ...)`
   * Tileset handling
   * Layer handling
   * Drawing
   * Fancy Ui
+  * Disabled Walking direction (per Block) 
 
-###### In Progress
-
-  * Animated tiles `(for a more alive environment)`
-  * Viewport `(for in-game effects e.g. parallax)`
-  * Tools `(select, fill, flip/rotate, ...)`
-  * Save/Load `(JSON, XML, ...)`
-
------
-
-#Dependencies
-
-  * **[HTML5 FileReader API](http://www.w3.org/TR/FileAPI/#dfn-filereader)** [1]
-  * **[Backbone.js](http://backbonejs.org/), [Underscore.js](http://underscorejs.org/)**
-  * **[jQuery](http://jquery.com/), [jQuery Ui](http://jqueryui.com/)**
-
-
-######Browser Support
-
-  * Google Chrome
-  * Mozilla Firefox
-  * Opera (latest)
-  * Internet Explorer 9 [2]
-
-----
-[1] Ajax is used as a fallback solution  
-[2] No alpha definition support (yet)
+## In Progress
+ 
+  * Event Modelling and Programming (ie. Dialogs and Walking Paths for Characters)
+  
