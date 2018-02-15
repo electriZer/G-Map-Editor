@@ -5,9 +5,9 @@ G Map Editor was made for a never released HTML5 RPG Maker.
 Copyright 2015 by Jiyan Akgül / [jiyan@akguel.net](mailto:jiyan@akguel.net)
 	
 	This Editor was based on following Map Editor :
-	Online Tile Map Editor (https://github.com/elias-schuett/Online-Tile-Map-Editor)<br>
-	Copyright 2012-2014 Elias Schütt &lt;contact@elias.media&gt;<br>
-	Open source under the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> license.
+	Online Tile Map Editor ([https://github.com/elias-schuett/Online-Tile-Map-Editor])
+	Copyright 2012-2014 Elias Schütt [contact@elias.media](mailto:contact@elias.media)
+	Open source under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.
 
 # Features
 
